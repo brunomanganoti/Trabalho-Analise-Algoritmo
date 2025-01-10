@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define TAMANHO 100000  // Tamanho do vetor
+
 void gerarCrescente(int *vetor, int tamanho) {
     for (int i = 0; i < tamanho; i++) {
         vetor[i] = i;
@@ -17,7 +19,7 @@ void gerarDecrescente(int *vetor, int tamanho) {
 void gerarAleatorio(int *vetor, int tamanho) {
     srand(time(NULL));
     for (int i = 0; i < tamanho; i++) {
-        vetor[i] = rand() % 100000;  // Números entre 0 e 99.999
+        vetor[i] = rand() % 100000;
     }
 }
 
@@ -44,8 +46,6 @@ void insertionSort(int vetor[], int tamanho) {
 		}
 	}	
 }
-
-#define TAMANHO 100000  // Tamanho do vetor
 
 int main() {
     int *vetor = (int *)malloc(TAMANHO * sizeof(int));

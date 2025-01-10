@@ -32,22 +32,18 @@ void medirTempo(void (*algoritmo)(int *, int), int *vetor, int tamanho) {
     printf("%.4f segundos\n", tempo);
 }
 
-void selecao_direta(int *vetor, int tamanho) {
-    int i, j, menor, aux;
-
-  for (i = 0; i < tamanho - 1; ++i) {
-    menor = i;
-    
-    for (j = i + 1; j < tamanho; ++j) {
-        if (vetor[j] < vetor[menor])
-            menor = j;
-    }
-
-    aux = vetor[i];
-    vetor[i] = vetor[menor];
-    vetor[menor] = aux;
-    }
-}
+void shellsort(int a[], int b) {    
+    for (int interval = b/2; interval > 0; interval /= 2) {  
+        for (int i = interval; i < b; i += 1) {    
+            int tempvar = a[i];  
+            int j;        
+            for (j = i; j >= interval && a[j - interval] > tempvar; j -= interval)  
+                a[j] = a[j - interval];  
+                
+            a[j] = tempvar;  
+        }  
+    }  
+}  
 
 int main() {
     int *vetor = (int *)malloc(TAMANHO * sizeof(int));
@@ -57,13 +53,13 @@ int main() {
     }
 
     gerarCrescente(vetor, TAMANHO);
-    medirTempo(selecao_direta, vetor, TAMANHO);
+    medirTempo(shellsort, vetor, TAMANHO);
 
     gerarDecrescente(vetor, TAMANHO);
-    medirTempo(selecao_direta, vetor, TAMANHO);
+    medirTempo(shellsort, vetor, TAMANHO);
 
     gerarAleatorio(vetor, TAMANHO);
-    medirTempo(selecao_direta, vetor, TAMANHO);
+    medirTempo(shellsort, vetor, TAMANHO);
 
     free(vetor);
     return 0;

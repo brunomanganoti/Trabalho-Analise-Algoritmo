@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define TAMANHO 100000  // Tamanho do vetor
+#define TAMANHO 30000  // Tamanho do vetor
 
 void gerarCrescente(int *vetor, int tamanho) {
     for (int i = 0; i < tamanho; i++) {
@@ -23,29 +23,41 @@ void gerarAleatorio(int *vetor, int tamanho) {
     }
 }
 
-void medirTempo(void (*algoritmo)(int *, int), int *vetor, int tamanho) {
+void medirTempo(void (*algoritmo)(int *, int, int), int *vetor, int tamanho) {
     clock_t inicio = clock();
-    algoritmo(vetor, tamanho);
+    algoritmo(vetor, 0, tamanho - 1);
     clock_t fim = clock();
 
     double tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
     printf("%.4f segundos\n", tempo);
 }
 
-void selecao_direta(int *vetor, int tamanho) {
-    int i, j, menor, aux;
+void troca(int *a, int *b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
 
-  for (i = 0; i < tamanho - 1; ++i) {
-    menor = i;
-    
-    for (j = i + 1; j < tamanho; ++j) {
-        if (vetor[j] < vetor[menor])
-            menor = j;
+int particiona(int array[], int low, int high) {
+    int pivot = array[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (array[j] <= pivot) {
+            i++;
+            troca(&array[i], &array[j]);
+        }
     }
 
-    aux = vetor[i];
-    vetor[i] = vetor[menor];
-    vetor[menor] = aux;
+    troca(&array[i + 1], &array[high]);
+    return i + 1;
+}
+
+void quickSort(int array[], int low, int high) {
+    if (low < high) {
+        int pi = particiona(array, low, high);
+        quickSort(array, low, pi - 1);
+        quickSort(array, pi + 1, high);
     }
 }
 
@@ -57,13 +69,13 @@ int main() {
     }
 
     gerarCrescente(vetor, TAMANHO);
-    medirTempo(selecao_direta, vetor, TAMANHO);
+    medirTempo(quickSort, vetor, TAMANHO);
 
     gerarDecrescente(vetor, TAMANHO);
-    medirTempo(selecao_direta, vetor, TAMANHO);
+    medirTempo(quickSort, vetor, TAMANHO);
 
     gerarAleatorio(vetor, TAMANHO);
-    medirTempo(selecao_direta, vetor, TAMANHO);
+    medirTempo(quickSort, vetor, TAMANHO);
 
     free(vetor);
     return 0;
